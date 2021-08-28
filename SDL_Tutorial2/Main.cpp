@@ -1,9 +1,11 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <vector>
 
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
+#include "Utils.hpp"
 
 int main(int argc, char* args[])
 {
@@ -15,33 +17,63 @@ int main(int argc, char* args[])
 
 	RenderWindow window("Game v1.0", 1280, 720);
 
+	std::cout << window.getRefreshRate() << std::endl;
+
 	SDL_Texture* grassTexture = window.loadTexture("ground_grass_1.png");
 
-	Entity entities[4] = { Entity(0, 0, grassTexture),
-						   Entity(30, 0, grassTexture),
-						   Entity(30, 30, grassTexture),
-						   Entity(30, 60, grassTexture) };
+	std::vector<Entity> entitiees = { Entity(Vector2f(0, 0), grassTexture),
+									  Entity(Vector2f(30, 0), grassTexture),
+									  Entity(Vector2f(30, 30), grassTexture),
+									  Entity(Vector2f(30, 60), grassTexture),
+									  Entity(Vector2f(100, 50), grassTexture) };
 
 	bool gameRunning = 1;
 
 	SDL_Event event;
 
+	const float timeStep = 0.01f;
+	float accumulator = 0.0f;
+	float currentTime = utils::hireTimeInSeconds();
+
 	while (gameRunning)
 	{
-		while (SDL_PollEvent(&event))
+		int startTicks = SDL_GetTicks();
+
+		float newTime = utils::hireTimeInSeconds();
+		float frameTime = newTime - currentTime;
+
+		currentTime = newTime;
+
+		accumulator += frameTime;
+
+		while (accumulator >= timeStep)
 		{
-			if (event.type == SDL_QUIT)
-				gameRunning = 0;
+			while (SDL_PollEvent(&event))
+			{
+				if (event.type == SDL_QUIT)
+					gameRunning = 0;
+			}
+
+			accumulator -= timeStep;
 		}
+
+		const float alpha = accumulator / timeStep;
 
 		window.clear();
 
-		for (size_t i = 0; i < sizeof(entities) / sizeof(entities[0]); i++)
+		for (Entity& e : entitiees)
 		{
-			window.render(entities[i]);
+			window.render(e);
 		}
 
+		std::cout << utils::hireTimeInSeconds() << std::endl;
+
 		window.display();
+
+		int frameTicks = SDL_GetTicks() - startTicks;
+
+		if (frameTicks < 1000 / window.getRefreshRate())
+			SDL_Delay(window.getRefreshRate() - frameTicks);
 	}
 
 	window.cleanUp();
