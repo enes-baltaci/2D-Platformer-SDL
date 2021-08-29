@@ -18,3 +18,14 @@ SDL_Rect Entity::getCurrentFrame()
 {
 	return currentFrame;
 }
+
+void Entity::setPos(int x, int y)
+{
+	pos.x = x;
+	pos.y = y;
+}
+
+Vector2f Entity::getMid()
+{
+	return (Vector2f { pos.x + currentFrame.w * 2, pos.y + currentFrame.h * 2 });
+}

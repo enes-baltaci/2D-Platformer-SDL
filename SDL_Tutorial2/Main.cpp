@@ -21,11 +21,7 @@ int main(int argc, char* args[])
 
 	SDL_Texture* grassTexture = window.loadTexture("ground_grass_1.png");
 
-	std::vector<Entity> entitiees = { Entity(Vector2f(0, 0), grassTexture),
-									  Entity(Vector2f(30, 0), grassTexture),
-									  Entity(Vector2f(30, 30), grassTexture),
-									  Entity(Vector2f(30, 60), grassTexture),
-									  Entity(Vector2f(100, 50), grassTexture) };
+	std::vector<Entity> entitiees = { Entity(Vector2f(150, 150), grassTexture) };
 
 	bool gameRunning = 1;
 
@@ -66,9 +62,32 @@ int main(int argc, char* args[])
 			window.render(e);
 		}
 
-		std::cout << utils::hireTimeInSeconds() << std::endl;
+		//std::cout << utils::hireTimeInSeconds() << std::endl;
 
 		window.display();
+
+		int mouseX, mouseY;
+
+		SDL_GetMouseState(&mouseX, &mouseY);
+
+		if (mouseX - entitiees[0].getMid().x < 150 && mouseX - entitiees[0].getMid().x > 0 && mouseY - entitiees[0].getPos().y < 130 && mouseY - entitiees[0].getPos().y > 0)
+		{
+			entitiees[0].setPos(entitiees[0].getPos().x - 3 , entitiees[0].getPos().y);
+		}
+		if (entitiees[0].getMid().x - mouseX < 150 && entitiees[0].getMid().x - mouseX > 0 && mouseY - entitiees[0].getPos().y < 130 && mouseY - entitiees[0].getPos().y > 0)
+		{
+			entitiees[0].setPos(entitiees[0].getPos().x + 3, entitiees[0].getPos().y);
+		}
+		if (mouseY - entitiees[0].getMid().y < 150 && mouseY - entitiees[0].getMid().y > 0 && mouseX - entitiees[0].getPos().x > 0 && mouseX - entitiees[0].getPos().x < 130)
+		{
+			entitiees[0].setPos(entitiees[0].getPos().x, entitiees[0].getPos().y - 3);
+		}
+		if (entitiees[0].getMid().y - mouseY < 150 && entitiees[0].getMid().y - mouseY > 0 && mouseX - entitiees[0].getPos().x > 0 && mouseX - entitiees[0].getPos().x < 130)
+		{
+			entitiees[0].setPos(entitiees[0].getPos().x, entitiees[0].getPos().y + 3);
+		}
+
+		std::cout << mouseX << ", " << mouseY << std::endl;
 
 		int frameTicks = SDL_GetTicks() - startTicks;
 
