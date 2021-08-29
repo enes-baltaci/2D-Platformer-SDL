@@ -7,7 +7,7 @@
 class Entity
 {
 public:
-	Entity(Vector2f p_pos, SDL_Texture* p_tex);
+	Entity(Vector2f p_pos, SDL_Texture* p_tex, int width, int height);
 	Vector2f& getPos()
 	{
 		return pos;
