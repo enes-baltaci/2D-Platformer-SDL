@@ -41,8 +41,11 @@ int main(int argc, char* args[])
 
 	SDL_Texture* platform = window.loadTexture("2dplatform.png");
 
-	std::vector<Entity> entitiees = { Entity(Vector2f(50, 0), knight, 64, 60),
-									  Entity(Vector2f(0, 630), platform, 320, 25), };
+	SDL_Texture* background = window.loadTexture("background (1).png");
+
+	std::vector<Entity> entitiees = { Entity(Vector2f(0, 0), background, 320, 160),
+									  Entity(Vector2f(0, 630), platform, 320, 25),
+									  Entity(Vector2f(50, 0), knight, 64, 60) };
 
 	bool gameRunning = 1, mouse = 0, down = 0;
 
@@ -52,18 +55,18 @@ int main(int argc, char* args[])
 	float accumulator = 0.0f;
 	float currentTime = utils::hireTimeInSeconds();
 
-	while (entitiees[0].getMid().y != 550)
+	while (entitiees[2].getMid().y != 550)
 	{
 		window.clear();
 
-		window.render(entitiees[0]);
-		window.render(entitiees[1]);
+		for (Entity& e : entitiees)
+		{
+			window.render(e);
+		}
 
 		window.display();
 
-		SDL_Delay(1);
-
-		entitiees[0].setPos(entitiees[0].getPos().x, entitiees[0].getPos().y + 1);
+		entitiees[2].setPos(entitiees[2].getPos().x, entitiees[2].getPos().y + 1);
 	}
 
 	while (gameRunning)
@@ -99,25 +102,27 @@ int main(int argc, char* args[])
 
 		if (mouse)
 		{
-			if (entitiees[0].getPos().y > 250 && !down)
+			if (entitiees[2].getPos().y > 250 && !down)
 			{
-				entitiees[0].setPos(entitiees[0].getPos().x, entitiees[0].getPos().y - 10);
+				entitiees[2].setPos(entitiees[2].getPos().x, entitiees[2].getPos().y - 10);
 			}
 			else
 			{
-				entitiees[0].setPos(entitiees[0].getPos().x, entitiees[0].getPos().y + 10);
+				entitiees[2].setPos(entitiees[2].getPos().x, entitiees[2].getPos().y + 10);
 				down = 1;
 			}
 
-			if (entitiees[0].getPos().y == 430)
+			if (entitiees[2].getPos().y == 430)
 			{
 				mouse = 0;
 				down = 0;
 			}
 		}
 
-		window.render(entitiees[0]);
-		window.render(entitiees[1]);
+		for (Entity& e : entitiees)
+		{
+			window.render(e);
+		}
 
 		setCursor(0, 0);
 		std::cout << utils::hireTimeInSeconds() << std::endl;
@@ -128,9 +133,9 @@ int main(int argc, char* args[])
 		setCursor(0, 2);
 		std::cout << mouseX << ", " << mouseY << std::endl;
 
-		if (entitiees[0].getMid().x - mouseX < 150 && entitiees[0].getMid().x - mouseX > 0 && mouseY - entitiees[0].getPos().y < 200 && mouseY - entitiees[0].getPos().y > 0)
+		if (entitiees[2].getMid().x - mouseX < 150 && entitiees[2].getMid().x - mouseX > 0 && mouseY - entitiees[2].getPos().y < 200 && mouseY - entitiees[2].getPos().y > 0)
 		{
-			entitiees[0].setPos(entitiees[0].getPos().x + 5, entitiees[0].getPos().y);
+			entitiees[2].setPos(entitiees[2].getPos().x + 5, entitiees[2].getPos().y);
 		}
 
 		int frameTicks = SDL_GetTicks() - startTicks;
