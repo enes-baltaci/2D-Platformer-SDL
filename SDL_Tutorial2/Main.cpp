@@ -41,7 +41,7 @@ int main(int argc, char* args[])
 
 	SDL_Texture* platform = window.loadTexture("2dplatform.png");
 
-	SDL_Texture* background = window.loadTexture("background (1).png");
+	SDL_Texture* background = window.loadTexture("background.png");
 
 	std::vector<Entity> entitiees = { Entity(Vector2f(0, 0), background, 320, 160),
 									  Entity(Vector2f(0, 630), platform, 320, 25),
