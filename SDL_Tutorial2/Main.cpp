@@ -137,11 +137,6 @@ int main(int argc, char* args[])
 		{
 			entitiees[2].setPos(entitiees[2].getPos().x + 5, entitiees[2].getPos().y);
 		}
-
-		int frameTicks = SDL_GetTicks() - startTicks;
-
-		if (frameTicks < 1000 / window.getRefreshRate())
-			SDL_Delay(window.getRefreshRate() - frameTicks);
 	}
 
 	window.cleanUp();
