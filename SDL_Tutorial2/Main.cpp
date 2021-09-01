@@ -102,13 +102,13 @@ int main(int argc, char* args[])
 
 		if (mouse)
 		{
-			if (entitiees[2].getPos().y > 250 && !down)
+			if (entitiees[2].getPos().y > 100 && !down)
 			{
-				entitiees[2].setPos(entitiees[2].getPos().x, entitiees[2].getPos().y - 10);
+				entitiees[2].setPos(entitiees[2].getPos().x, entitiees[2].getPos().y - 1);
 			}
 			else
 			{
-				entitiees[2].setPos(entitiees[2].getPos().x, entitiees[2].getPos().y + 10);
+				entitiees[2].setPos(entitiees[2].getPos().x, entitiees[2].getPos().y + 1);
 				down = 1;
 			}
 
@@ -135,8 +135,10 @@ int main(int argc, char* args[])
 
 		if (entitiees[2].getMid().x - mouseX < 150 && entitiees[2].getMid().x - mouseX > 0 && mouseY - entitiees[2].getPos().y < 200 && mouseY - entitiees[2].getPos().y > 0)
 		{
-			entitiees[2].setPos(entitiees[2].getPos().x + 5, entitiees[2].getPos().y);
+			entitiees[2].setPos(entitiees[2].getPos().x + 1, entitiees[2].getPos().y);
 		}
+
+		SDL_Delay(1);
 	}
 
 	window.cleanUp();
