@@ -41,13 +41,16 @@ int main(int argc, char* args[])
 
 	SDL_Texture* platform = window.loadTexture("2dplatform.png");
 
+	SDL_Texture* secondPlatform = window.loadTexture("2dplatform.png");
+
 	SDL_Texture* background = window.loadTexture("background.png");
 
-	std::vector<Entity> entitiees = { Entity(Vector2f(0, 0), background, 320, 160),
+	std::vector<Entity> entitiees = { Entity(Vector2f(0, 0), background, 320, 180),
 									  Entity(Vector2f(0, 630), platform, 320, 25),
-									  Entity(Vector2f(50, 0), knight, 64, 60) };
+									  Entity(Vector2f(50, 0), knight, 64, 60),
+									  Entity(Vector2f(1280, 630), secondPlatform, 320, 25) };
 
-	bool gameRunning = 1, mouse = 0, down = 0;
+	bool gameRunning = 1, mouse = 0, down = 0, newPlat = 0;
 
 	SDL_Event event;
 
@@ -59,9 +62,9 @@ int main(int argc, char* args[])
 	{
 		window.clear();
 
-		for (Entity& e : entitiees)
+		for (int i = 0; i < 3; i++)
 		{
-			window.render(e);
+			window.render(entitiees[i]);
 		}
 
 		window.display();
@@ -119,9 +122,19 @@ int main(int argc, char* args[])
 			}
 		}
 
-		for (Entity& e : entitiees)
+		if (newPlat)
 		{
-			window.render(e);
+			for (Entity& e : entitiees)
+			{
+				window.render(e);
+			}
+		}
+		else
+		{
+			for (size_t i = 0; i < 3; i++)
+			{
+				window.render(entitiees[i]);
+			}
 		}
 
 		setCursor(0, 0);
@@ -133,9 +146,36 @@ int main(int argc, char* args[])
 		setCursor(0, 2);
 		std::cout << mouseX << ", " << mouseY << std::endl;
 
-		if (entitiees[2].getMid().x - mouseX < 150 && entitiees[2].getMid().x - mouseX > 0 && mouseY - entitiees[2].getPos().y < 200 && mouseY - entitiees[2].getPos().y > 0)
+		if (entitiees[2].getMid().x < 620 && (entitiees[2].getMid().x - mouseX < 150 && entitiees[2].getMid().x - mouseX > 0 && mouseY - entitiees[2].getPos().y < 200 && mouseY - entitiees[2].getPos().y > 0))
 		{
 			entitiees[2].setPos(entitiees[2].getPos().x + 1, entitiees[2].getPos().y);
+		}
+		else if(entitiees[2].getMid().x > 100)
+		{
+			SDL_Delay(1);
+			entitiees[2].setPos(entitiees[2].getPos().x - 1, entitiees[2].getPos().y);
+		}
+
+		if (entitiees[1].getPos().x > -1280)
+		{
+			entitiees[1].setPos(entitiees[1].getPos().x - 1, entitiees[1].getPos().y);
+		}
+
+		if (entitiees[3].getPos().x > -1280 && newPlat)
+		{
+			entitiees[3].setPos(entitiees[3].getPos().x - 1, entitiees[3].getPos().y);
+		}
+		else newPlat = 0;
+		
+		if (entitiees[3].getPos().x == -300)
+		{
+			entitiees[1].setPos(1280, 630);
+		}
+
+		if (entitiees[1].getPos().x == -300)
+		{
+			entitiees[3].setPos(1280, 630);
+			newPlat = 1;
 		}
 
 		SDL_Delay(1);
