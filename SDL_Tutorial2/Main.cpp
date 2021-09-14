@@ -1,4 +1,5 @@
 #include <iostream>
+#include <conio.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <vector>
@@ -7,6 +8,13 @@
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
 #include "Utils.hpp"
+
+#define BACKGROUND_ENTITY_ID (0)
+#define PLATFORM1_ENTITY_ID (1)
+#define PLAYER_ENTITY_ID (2)
+#define PLATFORM2_ENTITY_ID (3)
+#define GAMEOVER (4)
+#define GROUNDED (630)
 
 void setCursor(int x, int y) // copy paste from stackoverflow
 {
@@ -45,12 +53,15 @@ int main(int argc, char* args[])
 
 	SDL_Texture* background = window.loadTexture("background.png");
 
+	SDL_Texture* endGame = window.loadTexture("game_over2.png");
+
 	std::vector<Entity> entitiees = { Entity(Vector2f(0, 0), background, 320, 180),
 									  Entity(Vector2f(0, 630), platform, 320, 25),
 									  Entity(Vector2f(50, 0), knight, 64, 60),
-									  Entity(Vector2f(1280, 630), secondPlatform, 320, 25) };
+									  Entity(Vector2f(1280, 630), secondPlatform, 320, 25),
+									  Entity(Vector2f(250, 70), endGame, 200, 100) };
 
-	bool gameRunning = 1, mouse = 0, down = 0, newPlat = 0;
+	bool gameRunning = 1, mouse = 0, down = 0, newPlat = 0, gameOver = 0;
 
 	SDL_Event event;
 
@@ -58,7 +69,7 @@ int main(int argc, char* args[])
 	float accumulator = 0.0f;
 	float currentTime = utils::hireTimeInSeconds();
 
-	while (entitiees[2].getMid().y != 550)
+	while (entitiees[PLAYER_ENTITY_ID].getMid().y != 550)
 	{
 		window.clear();
 
@@ -69,7 +80,7 @@ int main(int argc, char* args[])
 
 		window.display();
 
-		entitiees[2].setPos(entitiees[2].getPos().x, entitiees[2].getPos().y + 1);
+		entitiees[PLAYER_ENTITY_ID].setPos(entitiees[PLAYER_ENTITY_ID].getPos().x, entitiees[PLAYER_ENTITY_ID].getPos().y + 1);
 	}
 
 	while (gameRunning)
@@ -103,19 +114,19 @@ int main(int argc, char* args[])
 
 		window.clear();
 
-		if (mouse)
+		if (!gameOver && mouse)
 		{
-			if (entitiees[2].getPos().y > 100 && !down)
+			if (entitiees[PLAYER_ENTITY_ID].getPos().y > 100 && !down)
 			{
-				entitiees[2].setPos(entitiees[2].getPos().x, entitiees[2].getPos().y - 1);
+				entitiees[PLAYER_ENTITY_ID].setPos(entitiees[PLAYER_ENTITY_ID].getPos().x, entitiees[PLAYER_ENTITY_ID].getPos().y - 1);
 			}
 			else
 			{
-				entitiees[2].setPos(entitiees[2].getPos().x, entitiees[2].getPos().y + 1);
+				entitiees[PLAYER_ENTITY_ID].setPos(entitiees[PLAYER_ENTITY_ID].getPos().x, entitiees[PLAYER_ENTITY_ID].getPos().y + 1);
 				down = 1;
 			}
 
-			if (entitiees[2].getPos().y == 430)
+			if (entitiees[PLAYER_ENTITY_ID].getPos().y == 430)
 			{
 				mouse = 0;
 				down = 0;
@@ -124,9 +135,9 @@ int main(int argc, char* args[])
 
 		if (newPlat)
 		{
-			for (Entity& e : entitiees)
+			for (size_t i = 0; i < 4; i++)
 			{
-				window.render(e);
+				window.render(entitiees[i]);
 			}
 		}
 		else
@@ -146,40 +157,71 @@ int main(int argc, char* args[])
 		setCursor(0, 2);
 		std::cout << mouseX << ", " << mouseY << std::endl;
 
-		if (entitiees[2].getMid().x < 620 && (entitiees[2].getMid().x - mouseX < 150 && entitiees[2].getMid().x - mouseX > 0 && mouseY - entitiees[2].getPos().y < 200 && mouseY - entitiees[2].getPos().y > 0))
+		if (!gameOver)
 		{
-			entitiees[2].setPos(entitiees[2].getPos().x + 1, entitiees[2].getPos().y);
+			if (entitiees[PLAYER_ENTITY_ID].getMid().x < 620 && (entitiees[PLAYER_ENTITY_ID].getMid().x - mouseX < 150 && entitiees[PLAYER_ENTITY_ID].getMid().x - mouseX > 0 && mouseY - entitiees[PLAYER_ENTITY_ID].getPos().y < 200 && mouseY - entitiees[PLAYER_ENTITY_ID].getPos().y > 0))
+			{
+				entitiees[PLAYER_ENTITY_ID].setPos(entitiees[PLAYER_ENTITY_ID].getPos().x + 1, entitiees[PLAYER_ENTITY_ID].getPos().y);
+			}
+			else if (entitiees[PLAYER_ENTITY_ID].getMid().x > 100)
+			{
+				SDL_Delay(1);
+				entitiees[PLAYER_ENTITY_ID].setPos(entitiees[PLAYER_ENTITY_ID].getPos().x - 1, entitiees[PLAYER_ENTITY_ID].getPos().y);
+			}
 		}
-		else if(entitiees[2].getMid().x > 100)
+		else
 		{
-			SDL_Delay(1);
-			entitiees[2].setPos(entitiees[2].getPos().x - 1, entitiees[2].getPos().y);
+			if (entitiees[PLAYER_ENTITY_ID].getPos().y < 720)
+			{
+				entitiees[PLAYER_ENTITY_ID].setPos(entitiees[PLAYER_ENTITY_ID].getPos().x, entitiees[PLAYER_ENTITY_ID].getPos().y + 1);
+			}
+			else if (entitiees[PLAYER_ENTITY_ID].getPos().y == 720)
+			{
+				gameRunning = 0;
+
+				window.render(entitiees[GAMEOVER]);
+
+				window.display();
+			}
 		}
 
-		if (entitiees[1].getPos().x > -1280)
+		if (entitiees[PLATFORM1_ENTITY_ID].getPos().x > -1280)
 		{
-			entitiees[1].setPos(entitiees[1].getPos().x - 1, entitiees[1].getPos().y);
+			entitiees[PLATFORM1_ENTITY_ID].setPos(entitiees[PLATFORM1_ENTITY_ID].getPos().x - 1, entitiees[PLATFORM1_ENTITY_ID].getPos().y);
 		}
 
-		if (entitiees[3].getPos().x > -1280 && newPlat)
+		if (entitiees[PLATFORM2_ENTITY_ID].getPos().x > -1280 && newPlat)
 		{
-			entitiees[3].setPos(entitiees[3].getPos().x - 1, entitiees[3].getPos().y);
+			entitiees[PLATFORM2_ENTITY_ID].setPos(entitiees[PLATFORM2_ENTITY_ID].getPos().x - 1, entitiees[PLATFORM2_ENTITY_ID].getPos().y);
 		}
 		else newPlat = 0;
-		
-		if (entitiees[3].getPos().x == -300)
+
+		if (entitiees[PLATFORM2_ENTITY_ID].getPos().x == -300)
 		{
-			entitiees[1].setPos(1280, 630);
+			entitiees[PLATFORM1_ENTITY_ID].setPos(1280, 630);
 		}
 
-		if (entitiees[1].getPos().x == -300)
+		if (entitiees[PLATFORM1_ENTITY_ID].getPos().x == -300)
 		{
-			entitiees[3].setPos(1280, 630);
+			entitiees[PLATFORM2_ENTITY_ID].setPos(1280, 630);
 			newPlat = 1;
+		}
+
+		if (entitiees[PLAYER_ENTITY_ID].getFeetY() == GROUNDED)
+		{
+			if (((entitiees[PLAYER_ENTITY_ID].getFeetX().x > entitiees[PLATFORM1_ENTITY_ID].getPos().x && entitiees[PLAYER_ENTITY_ID].getFeetX().y > entitiees[PLATFORM1_ENTITY_ID].getPos().x + 1280) &&
+				(entitiees[PLAYER_ENTITY_ID].getFeetX().x < entitiees[PLATFORM2_ENTITY_ID].getPos().x && entitiees[PLAYER_ENTITY_ID].getFeetX().y < entitiees[PLATFORM2_ENTITY_ID].getPos().x + 1280)) ||
+				((entitiees[PLAYER_ENTITY_ID].getFeetX().x > entitiees[PLATFORM2_ENTITY_ID].getPos().x && entitiees[PLAYER_ENTITY_ID].getFeetX().y > entitiees[PLATFORM2_ENTITY_ID].getPos().x + 1280) &&
+				(entitiees[PLAYER_ENTITY_ID].getFeetX().x < entitiees[PLATFORM1_ENTITY_ID].getPos().x && entitiees[PLAYER_ENTITY_ID].getFeetX().y < entitiees[PLATFORM1_ENTITY_ID].getPos().x + 1280)))
+			{
+				gameOver = 1;
+			}
 		}
 
 		SDL_Delay(1);
 	}
+	std::cout << "Press a key to exit.";
+	_getch();
 
 	window.cleanUp();
 	SDL_Quit();

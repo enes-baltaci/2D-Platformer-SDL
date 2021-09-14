@@ -16,6 +16,8 @@ public:
 	SDL_Rect getCurrentFrame();
 	void setPos(int x, int y);
 	Vector2f getMid();
+	int getFeetY();
+	Vector2f getFeetX();
 private:
 	Vector2f pos;
 	SDL_Rect currentFrame;

@@ -29,3 +29,13 @@ Vector2f Entity::getMid()
 {
 	return (Vector2f { pos.x + currentFrame.w * 2, pos.y + currentFrame.h * 2 });
 }
+
+int Entity::getFeetY()
+{
+	return ( (pos.y + currentFrame.h * 4) - 40 );
+}
+
+Vector2f Entity::getFeetX()
+{
+	return (Vector2f{ pos.x + 92, pos.x + 160 });
+}
