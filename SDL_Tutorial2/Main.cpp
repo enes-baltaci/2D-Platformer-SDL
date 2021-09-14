@@ -53,7 +53,7 @@ int main(int argc, char* args[])
 
 	SDL_Texture* background = window.loadTexture("background.png");
 
-	SDL_Texture* endGame = window.loadTexture("game_over2.png");
+	SDL_Texture* endGame = window.loadTexture("game_over.png");
 
 	std::vector<Entity> entitiees = { Entity(Vector2f(0, 0), background, 320, 180),
 									  Entity(Vector2f(0, 630), platform, 320, 25),
