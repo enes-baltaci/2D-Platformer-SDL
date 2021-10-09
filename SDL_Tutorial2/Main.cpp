@@ -188,38 +188,30 @@ int main(int argc, char* args[])
 
 		if (!gameOver)
 		{
+			if (!change[0])
+			{
+				entitiees[PLAYER_ENTITY_ID] = entitiees[6];
+				change[0] = 1;
+			}
+			else if (!change[1] && changeIndex == 100)
+			{
+				entitiees[PLAYER_ENTITY_ID] = entitiees[7];
+				change[1] = 1;
+			}
+			else if (changeIndex == 200)
+			{
+				entitiees[PLAYER_ENTITY_ID] = entitiees[8];
+			}
+
+			if (++changeIndex == 300)
+			{
+				change[0] = 0;
+				change[1] = 0;
+				changeIndex = 0;
+			}
+
 			if (entitiees[PLAYER_ENTITY_ID].getMid().x < 620 && (entitiees[PLAYER_ENTITY_ID].getMid().x - mouseX < 150 && entitiees[PLAYER_ENTITY_ID].getMid().x - mouseX > 0 && mouseY - entitiees[PLAYER_ENTITY_ID].getPos().y < 200 && mouseY - entitiees[PLAYER_ENTITY_ID].getPos().y > 0))
 			{
-				if (change[3]) {
-					change[3] = 0;
-					if (changeIndex < 1000) entitiees[PLAYER_ENTITY_ID] = entitiees[6];
-					else if (changeIndex < 2000) entitiees[PLAYER_ENTITY_ID] = entitiees[7];
-					else entitiees[PLAYER_ENTITY_ID] = entitiees[8];
-				}
-
-				if (!change[0])
-				{
-					entitiees[PLAYER_ENTITY_ID] = entitiees[6];
-					change[0] = 1;
-				}
-				else if (!change[1] && changeIndex == 1000)
-				{
-					entitiees[PLAYER_ENTITY_ID] = entitiees[7];
-					change[1] = 1;
-				}
-				else if (changeIndex == 2000)
-				{
-					entitiees[PLAYER_ENTITY_ID] = entitiees[8];					
-					changeIndex = 0;
-				}
-
-				if (++changeIndex == 3000)
-				{
-					change[0] = 0;
-					change[1] = 0;
-					changeIndex = 0;
-				}
-
 				entitiees[PLAYER_ENTITY_ID].setPos(entitiees[PLAYER_ENTITY_ID].getPos().x + 1, entitiees[PLAYER_ENTITY_ID].getPos().y); // move right with mouse
 				entitiees[5].setPos(entitiees[PLAYER_ENTITY_ID].getPos().x, entitiees[PLAYER_ENTITY_ID].getPos().y);
 				entitiees[6].setPos(entitiees[PLAYER_ENTITY_ID].getPos().x, entitiees[PLAYER_ENTITY_ID].getPos().y);
@@ -228,13 +220,6 @@ int main(int argc, char* args[])
 			}
 			else if (entitiees[PLAYER_ENTITY_ID].getMid().x > 100)
 			{
-				if (!change[3])
-				{
-					entitiees[PLAYER_ENTITY_ID] = entitiees[5];
-					change[3] = 1;
-				}
-
-				SDL_Delay(1);
 				entitiees[PLAYER_ENTITY_ID].setPos(entitiees[PLAYER_ENTITY_ID].getPos().x - 1, entitiees[PLAYER_ENTITY_ID].getPos().y); // move left without mouse
 				entitiees[5].setPos(entitiees[PLAYER_ENTITY_ID].getPos().x, entitiees[PLAYER_ENTITY_ID].getPos().y);
 				entitiees[6].setPos(entitiees[PLAYER_ENTITY_ID].getPos().x, entitiees[PLAYER_ENTITY_ID].getPos().y);
