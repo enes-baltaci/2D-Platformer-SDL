@@ -63,13 +63,13 @@ int main(int argc, char* args[])
 
 	std::vector<Entity> entitiees = { Entity(Vector2f(0, 0), background, 320, 180),
 									  Entity(Vector2f(0, 630), platform, 320, 25),
-									  Entity(Vector2f(50, 0), knight, 64, 60),
+									  Entity(Vector2f(50, 0), knight, 64, 64),
 									  Entity(Vector2f(1280, 630), secondPlatform, 320, 25),
 									  Entity(Vector2f(250, 70), endGame, 200, 100),
-									  Entity(Vector2f(50, 0), knight, 64, 60),
-									  Entity(Vector2f(50, 0), knight_w1, 64, 60),
-									  Entity(Vector2f(50, 0), knight_w2, 64, 60),
-									  Entity(Vector2f(50, 0), knight_w3, 64, 60) };
+									  Entity(Vector2f(50, 0), knight, 64, 64),
+									  Entity(Vector2f(50, 0), knight_w1, 64, 64),
+									  Entity(Vector2f(50, 0), knight_w2, 64, 64),
+									  Entity(Vector2f(50, 0), knight_w3, 64, 64) };
 
 	bool gameRunning = 1, mouse = 0, down = 0, newPlat = 0, gameOver = 0, change[4];
 
@@ -86,7 +86,7 @@ int main(int argc, char* args[])
 	float accumulator = 0.0f;
 	float currentTime = utils::hireTimeInSeconds();
 
-	while (entitiees[PLAYER_ENTITY_ID].getMid().y != 550)
+	while (entitiees[PLAYER_ENTITY_ID].getMid().y != 558)
 	{
 		window.clear();
 
@@ -155,7 +155,7 @@ int main(int argc, char* args[])
 				down = 1;
 			}
 
-			if (entitiees[PLAYER_ENTITY_ID].getPos().y == 430)
+			if (entitiees[PLAYER_ENTITY_ID].getPos().y > 430)
 			{
 				mouse = 0;
 				down = 0;

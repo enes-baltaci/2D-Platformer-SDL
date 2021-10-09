@@ -32,7 +32,7 @@ Vector2f Entity::getMid()
 
 int Entity::getFeetY()
 {
-	return ( (pos.y + currentFrame.h * 4) - 40 );
+	return ( (pos.y + currentFrame.h * 4) - 56 );
 }
 
 Vector2f Entity::getFeetX()
