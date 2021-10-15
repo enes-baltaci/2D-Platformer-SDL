@@ -74,13 +74,13 @@ int main(int argc, char* args[])
 	SDL_Texture* knight_w3 = window.loadTexture("hulking_knight_walk3.png");
 
 	std::vector<Entity> entitiees = { Entity(Vector2f(0, 0), background, 320, 180),
-										Entity(Vector2f(0, 630), platform, 320, 25),
-										Entity(Vector2f(50, 0), knight, 64, 64),
-										Entity(Vector2f(1280, 630), secondPlatform, 320, 25),
-										Entity(Vector2f(250, 70), endGame, 200, 100),
-										Entity(Vector2f(50, 0), knight_w1, 64, 64),
-										Entity(Vector2f(50, 0), knight_w2, 64, 64),
-										Entity(Vector2f(50, 0), knight_w3, 64, 64) };
+									  Entity(Vector2f(0, 630), platform, 320, 25),
+									  Entity(Vector2f(50, 0), knight, 64, 64),
+									  Entity(Vector2f(1280, 630), secondPlatform, 320, 25),
+									  Entity(Vector2f(250, 70), endGame, 200, 100),
+									  Entity(Vector2f(50, 0), knight_w1, 64, 64),
+									  Entity(Vector2f(50, 0), knight_w2, 64, 64),
+									  Entity(Vector2f(50, 0), knight_w3, 64, 64) };
 
 	bool gameRunning = 1, mouse = 0, down = 0, newPlat = 0, gameOver = 0, change[4];
 
